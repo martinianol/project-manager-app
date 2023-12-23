@@ -25,17 +25,14 @@ function App() {
       (project) => project.id === projectId
     );
 
-    console.log("projectId", projectId);
-    console.log("projectToDisplay", projectToDisplay);
-
     setSelectedProject(projectToDisplay);
   };
 
-  const handleDeleteProject = (titleToDelete) => {
+  const handleDeleteProject = (id) => {
     setSelectedProject(null);
     setDisplayAddProjectForm(false);
     setProjects((prevProjects) =>
-      prevProjects.filter((project) => project.title !== titleToDelete)
+      prevProjects.filter((project) => project.id !== id)
     );
   };
 
@@ -48,10 +45,11 @@ function App() {
     setSelectedProject(projectModified);
 
     setProjects((prevState) => {
-      const remainingProjects = prevState.filter(
-        (project) => project.title !== selectedProject.title
+      const indxToRemove = prevState.findIndex(
+        (project) => project.id === projectModified.id
       );
-      return [...remainingProjects, projectModified];
+
+      return prevState.toSpliced(indxToRemove, 1, projectModified);
     });
   };
 
