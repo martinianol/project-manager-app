@@ -53,6 +53,23 @@ function App() {
     });
   };
 
+  const handleAddTask = (taskToAdd) => {
+    console.log(taskToAdd);
+    const projectModified = {
+      ...selectedProject,
+      tasks: [...selectedProject.tasks, taskToAdd],
+    };
+    setSelectedProject(projectModified);
+
+    setProjects((prevState) => {
+      const indxToRemove = prevState.findIndex(
+        (project) => project.id === projectModified.id
+      );
+
+      return prevState.toSpliced(indxToRemove, 1, projectModified);
+    });
+  };
+
   return (
     <main className="h-screen my-8 flex gap-8">
       <ProjectSidebar
@@ -65,6 +82,7 @@ function App() {
           project={selectedProject}
           onDeleteProject={handleDeleteProject}
           onDeleteTask={handleDeleteTask}
+          onAddTask={handleAddTask}
         />
       )}
       {!displayAddProjectForm && !selectedProject && (

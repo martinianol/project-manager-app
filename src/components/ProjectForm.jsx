@@ -2,13 +2,7 @@ import { useRef } from "react";
 import Input from "./common/Input";
 import { generateId } from "../utils/utils";
 
-// const generateId = Math.random().toString(16).slice(2);
-const INITIAL_TASKS = [
-  { id: generateId(), description: "Create" },
-  { id: generateId(), description: "Read" },
-  { id: generateId(), description: "Update" },
-  { id: generateId(), description: "Delete" },
-];
+
 
 const ProjectForm = ({ onCancel, onSave }) => {
   const titleRef = useRef();
@@ -21,7 +15,7 @@ const ProjectForm = ({ onCancel, onSave }) => {
       title: titleRef.current.value,
       description: descriptionRef.current.value,
       date: dateRef.current.value,
-      tasks: INITIAL_TASKS,
+      tasks: [],
     };
 
     onSave(newProject);
