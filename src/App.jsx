@@ -4,16 +4,13 @@ import NoProjectSelected from "./components/NoProjectSelected";
 import NewProject from "./components/NewProject";
 import Details from "./components/Details/Details";
 
-function App() {
-  const [displayNewProjectForm, setDisplayNewProjectForm] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState(null);
-  // const [selectedProjectId, setSelectedProjectId] = useState(null);
+const INITAL_PROJECTS_STATE = {
+  selectedProject: undefined, //undefined = no project selected, null = add new project, id show project details
+  projects: [],
+};
 
-  const [projectsState, setProjectsState] = useState({
-    selectedProject: undefined, //undefined = no project selected, null = add new project, id show project details
-    projects: [],
-  });
+function App() {
+  const [projectsState, setProjectsState] = useState(INITAL_PROJECTS_STATE);
 
   const handleAddProject = () => {
     setProjectsState((prevState) => ({ ...prevState, selectedProject: null }));
