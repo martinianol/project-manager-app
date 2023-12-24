@@ -5,92 +5,110 @@ import NewProject from "./components/NewProject";
 import Details from "./components/Details/Details";
 
 function App() {
-  const [projects, setProjects] = useState([]);
   const [displayNewProjectForm, setDisplayNewProjectForm] = useState(false);
+  const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   // const [selectedProjectId, setSelectedProjectId] = useState(null);
 
+  const [projectsState, setProjectsState] = useState({
+    selectedProject: undefined, //undefined = no project selected, null = add new project, id show project details
+    projects: [],
+  });
+
   const handleAddProject = () => {
-    setSelectedProject(null);
-    setDisplayNewProjectForm(true);
+    setProjectsState((prevState) => ({ ...prevState, selectedProject: null }));
   };
 
-  const handleCancel = () => setDisplayNewProjectForm(false);
+  const handleCancel = () =>
+    setProjectsState((prevState) => ({
+      ...prevState,
+      selectedProject: undefined,
+    }));
 
   const handleSave = (newProject) => {
-    setProjects((prevState) => [newProject, ...prevState]);
+    setProjectsState((prevState) => ({
+      ...prevState,
+      projects: [newProject, ...prevState.projects],
+    }));
   };
 
   const handleSelectProject = (projectId) => {
-    //setSelectedProjectId(projectId)
-    const projectToDisplay = projects.find(
-      (project) => project.id === projectId
-    );
-
-    setSelectedProject(projectToDisplay);
+    setProjectsState((prevState) => ({
+      ...prevState,
+      selectedProject: projectId,
+    }));
   };
 
   const handleDeleteProject = (id) => {
-    setSelectedProject(null);
-    setDisplayNewProjectForm(false);
-    setProjects((prevProjects) =>
-      prevProjects.filter((project) => project.id !== id)
-    );
+    setProjectsState((prevState) => ({
+      selectedProject: undefined,
+      projects: prevState.projects.filter((project) => project.id !== id),
+    }));
   };
 
   const handleDeleteTask = (taskToDelete) => {
+    const selectedProjectIndx = projectsState.projects.findIndex(
+      (project) => project.id === projectsState.selectedProject
+    );
+    const selectedProject = projectsState.projects[selectedProjectIndx];
+
     const remainingTasks = selectedProject.tasks.filter(
       (task) => task.id !== taskToDelete
     );
-    const projectModified = { ...selectedProject, tasks: remainingTasks };
+    const modifiedProject = { ...selectedProject, tasks: remainingTasks };
 
-    setSelectedProject(projectModified);
+    const projects = projectsState.projects.toSpliced(
+      selectedProjectIndx,
+      1,
+      modifiedProject
+    );
 
-    setProjects((prevState) => {
-      const indxToRemove = prevState.findIndex(
-        (project) => project.id === projectModified.id
-      );
-
-      return prevState.toSpliced(indxToRemove, 1, projectModified);
-    });
+    setProjectsState((prevState) => ({ ...prevState, projects }));
   };
 
   const handleAddTask = (taskToAdd) => {
-    const projectModified = {
+    const selectedProjectIndx = projectsState.projects.findIndex(
+      (project) => project.id === projectsState.selectedProject
+    );
+    const selectedProject = projectsState.projects[selectedProjectIndx];
+
+    const modifiedProject = {
       ...selectedProject,
-      tasks: [...selectedProject.tasks, taskToAdd],
+      tasks: [taskToAdd, ...selectedProject.tasks],
     };
-    setSelectedProject(projectModified);
 
-    setProjects((prevState) => {
-      const indxToRemove = prevState.findIndex(
-        (project) => project.id === projectModified.id
-      );
+    const projects = projectsState.projects.toSpliced(
+      selectedProjectIndx,
+      1,
+      modifiedProject
+    );
 
-      return prevState.toSpliced(indxToRemove, 1, projectModified);
-    });
+    setProjectsState((prevState) => ({ ...prevState, projects }));
   };
 
+  const projectToDisplay = projectsState.projects.find(
+    (project) => project.id === projectsState.selectedProject
+  );
 
   return (
     <main className="h-screen my-8 flex gap-8">
       <ProjectSidebar
         onAddProject={handleAddProject}
         onSelectProject={handleSelectProject}
-        projects={projects}
+        projects={projectsState.projects}
       />
-      {selectedProject && (
+      {projectToDisplay && (
         <Details
-          project={selectedProject}
+          project={projectToDisplay}
           onDeleteProject={handleDeleteProject}
           onDeleteTask={handleDeleteTask}
           onAddTask={handleAddTask}
         />
       )}
-      {!displayNewProjectForm && !selectedProject && (
+      {projectsState.selectedProject === undefined && (
         <NoProjectSelected onAddNewProject={handleAddProject} />
       )}
-      {displayNewProjectForm && !selectedProject && (
+      {projectsState.selectedProject === null && (
         <NewProject onCancel={handleCancel} onSave={handleSave} />
       )}
     </main>

@@ -39,7 +39,9 @@ const Tasks = ({ tasks, onDelete, onAdd }) => {
           ))}
         </ul>
       ) : (
-        <p className="mb-4 text-stone-800 mt-4 ">This project does not have any tasks yet</p>
+        <p className="mb-4 text-stone-800 mt-4 ">
+          This project does not have any tasks yet
+        </p>
       )}
     </>
   );
