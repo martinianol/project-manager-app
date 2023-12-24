@@ -1,26 +1,28 @@
 import { useState } from "react";
 import ProjectSidebar from "./components/ProjectSideBar";
+import NoProjectSelected from "./components/NoProjectSelected";
 import NewProject from "./components/NewProject";
-import ProjectForm from "./components/ProjectForm";
 import Details from "./components/Details/Details";
 
 function App() {
   const [projects, setProjects] = useState([]);
-  const [displayAddProjectForm, setDisplayAddProjectForm] = useState(false);
+  const [displayNewProjectForm, setDisplayNewProjectForm] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+  // const [selectedProjectId, setSelectedProjectId] = useState(null);
 
   const handleAddProject = () => {
     setSelectedProject(null);
-    setDisplayAddProjectForm(true);
+    setDisplayNewProjectForm(true);
   };
 
-  const handleCancel = () => setDisplayAddProjectForm(false);
+  const handleCancel = () => setDisplayNewProjectForm(false);
 
   const handleSave = (newProject) => {
     setProjects((prevState) => [newProject, ...prevState]);
   };
 
   const handleSelectProject = (projectId) => {
+    //setSelectedProjectId(projectId)
     const projectToDisplay = projects.find(
       (project) => project.id === projectId
     );
@@ -30,7 +32,7 @@ function App() {
 
   const handleDeleteProject = (id) => {
     setSelectedProject(null);
-    setDisplayAddProjectForm(false);
+    setDisplayNewProjectForm(false);
     setProjects((prevProjects) =>
       prevProjects.filter((project) => project.id !== id)
     );
@@ -54,7 +56,6 @@ function App() {
   };
 
   const handleAddTask = (taskToAdd) => {
-    console.log(taskToAdd);
     const projectModified = {
       ...selectedProject,
       tasks: [...selectedProject.tasks, taskToAdd],
@@ -69,6 +70,7 @@ function App() {
       return prevState.toSpliced(indxToRemove, 1, projectModified);
     });
   };
+
 
   return (
     <main className="h-screen my-8 flex gap-8">
@@ -85,11 +87,11 @@ function App() {
           onAddTask={handleAddTask}
         />
       )}
-      {!displayAddProjectForm && !selectedProject && (
-        <NewProject onNewProject={handleAddProject} />
+      {!displayNewProjectForm && !selectedProject && (
+        <NoProjectSelected onAddNewProject={handleAddProject} />
       )}
-      {displayAddProjectForm && !selectedProject && (
-        <ProjectForm onCancel={handleCancel} onSave={handleSave} />
+      {displayNewProjectForm && !selectedProject && (
+        <NewProject onCancel={handleCancel} onSave={handleSave} />
       )}
     </main>
   );

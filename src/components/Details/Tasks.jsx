@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import TaskItem from "./TaskItem";
-import Input from "../common/Input";
 import { generateId } from "../../utils/utils";
 
 const Tasks = ({ tasks, onDelete, onAdd }) => {
