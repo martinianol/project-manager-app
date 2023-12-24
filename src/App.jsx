@@ -96,6 +96,7 @@ function App() {
         onStartNewProject={handleStartAddProject}
         onSelectProject={handleSelectProject}
         projects={projectsState.projects}
+        selectedProjectId={projectsState.selectedProjectId}
       />
       {projectToDisplay && (
         <Details

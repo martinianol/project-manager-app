@@ -1,5 +1,5 @@
 import Header from "./Header";
-import Tasks from "./Tasks";
+import Tasks from "./Tasks/Tasks";
 
 const Details = ({ project, onDeleteProject, onDeleteTask, onAddTask }) => {
   return (
