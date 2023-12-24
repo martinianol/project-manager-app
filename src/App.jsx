@@ -12,7 +12,7 @@ const INITAL_PROJECTS_STATE = {
 function App() {
   const [projectsState, setProjectsState] = useState(INITAL_PROJECTS_STATE);
 
-  const handleAddProject = () => {
+  const handleStartAddProject = () => {
     setProjectsState((prevState) => ({
       ...prevState,
       selectedProjectId: null,
@@ -25,7 +25,7 @@ function App() {
       selectedProjectId: undefined,
     }));
 
-  const handleSave = (newProject) => {
+  const handleAddNewProject = (newProject) => {
     setProjectsState((prevState) => ({
       ...prevState,
       projects: [newProject, ...prevState.projects],
@@ -93,7 +93,7 @@ function App() {
   return (
     <main className="h-screen my-8 flex gap-8">
       <ProjectSidebar
-        onAddProject={handleAddProject}
+        onStartNewProject={handleStartAddProject}
         onSelectProject={handleSelectProject}
         projects={projectsState.projects}
       />
@@ -106,10 +106,10 @@ function App() {
         />
       )}
       {projectsState.selectedProjectId === undefined && (
-        <NoProjectSelected onAddNewProject={handleAddProject} />
+        <NoProjectSelected onStartNewProject={handleStartAddProject} />
       )}
       {projectsState.selectedProjectId === null && (
-        <NewProject onCancel={handleCancel} onSave={handleSave} />
+        <NewProject onCancel={handleCancel} onSave={handleAddNewProject} />
       )}
     </main>
   );
