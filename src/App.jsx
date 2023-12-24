@@ -5,7 +5,7 @@ import NewProject from "./components/NewProject";
 import Details from "./components/Details/Details";
 
 const INITAL_PROJECTS_STATE = {
-  selectedProject: undefined, //undefined = no project selected, null = add new project, id show project details
+  selectedProjectId: undefined, //undefined = no project selected, null = add new project, id show project details
   projects: [],
 };
 
@@ -13,13 +13,16 @@ function App() {
   const [projectsState, setProjectsState] = useState(INITAL_PROJECTS_STATE);
 
   const handleAddProject = () => {
-    setProjectsState((prevState) => ({ ...prevState, selectedProject: null }));
+    setProjectsState((prevState) => ({
+      ...prevState,
+      selectedProjectId: null,
+    }));
   };
 
   const handleCancel = () =>
     setProjectsState((prevState) => ({
       ...prevState,
-      selectedProject: undefined,
+      selectedProjectId: undefined,
     }));
 
   const handleSave = (newProject) => {
@@ -32,20 +35,20 @@ function App() {
   const handleSelectProject = (projectId) => {
     setProjectsState((prevState) => ({
       ...prevState,
-      selectedProject: projectId,
+      selectedProjectId: projectId,
     }));
   };
 
   const handleDeleteProject = (id) => {
     setProjectsState((prevState) => ({
-      selectedProject: undefined,
+      selectedProjectId: undefined,
       projects: prevState.projects.filter((project) => project.id !== id),
     }));
   };
 
   const handleDeleteTask = (taskToDelete) => {
     const selectedProjectIndx = projectsState.projects.findIndex(
-      (project) => project.id === projectsState.selectedProject
+      (project) => project.id === projectsState.selectedProjectId
     );
     const selectedProject = projectsState.projects[selectedProjectIndx];
 
@@ -65,7 +68,7 @@ function App() {
 
   const handleAddTask = (taskToAdd) => {
     const selectedProjectIndx = projectsState.projects.findIndex(
-      (project) => project.id === projectsState.selectedProject
+      (project) => project.id === projectsState.selectedProjectId
     );
     const selectedProject = projectsState.projects[selectedProjectIndx];
 
@@ -84,7 +87,7 @@ function App() {
   };
 
   const projectToDisplay = projectsState.projects.find(
-    (project) => project.id === projectsState.selectedProject
+    (project) => project.id === projectsState.selectedProjectId
   );
 
   return (
@@ -102,10 +105,10 @@ function App() {
           onAddTask={handleAddTask}
         />
       )}
-      {projectsState.selectedProject === undefined && (
+      {projectsState.selectedProjectId === undefined && (
         <NoProjectSelected onAddNewProject={handleAddProject} />
       )}
-      {projectsState.selectedProject === null && (
+      {projectsState.selectedProjectId === null && (
         <NewProject onCancel={handleCancel} onSave={handleSave} />
       )}
     </main>
