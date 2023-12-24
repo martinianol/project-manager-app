@@ -27,7 +27,7 @@ function App() {
 
   const handleAddNewProject = (newProject) => {
     setProjectsState((prevState) => ({
-      ...prevState,
+      selectedProjectId: newProject.id,
       projects: [newProject, ...prevState.projects],
     }));
   };
@@ -109,7 +109,7 @@ function App() {
         <NoProjectSelected onStartNewProject={handleStartAddProject} />
       )}
       {projectsState.selectedProjectId === null && (
-        <NewProject onCancel={handleCancel} onSave={handleAddNewProject} />
+        <NewProject onCancel={handleCancel} onAddNewProject={handleAddNewProject} />
       )}
     </main>
   );
